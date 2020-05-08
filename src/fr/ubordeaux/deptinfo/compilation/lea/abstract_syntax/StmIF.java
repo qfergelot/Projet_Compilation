@@ -28,7 +28,7 @@ public class StmIF extends StmBinary {
 			result += tab() + "goto " + label_then + ";" + NL;
 		decIndent();
 		if(this.getRight()!=null){
-			result += getRight().generateCode();
+			result += "{" + NL + getRight().generateCode() + NL +"}";
 		}
 		result += tab() + "goto " + label_fin + ";" + NL;
 		result += tab() + label_then + ":{" + NL;

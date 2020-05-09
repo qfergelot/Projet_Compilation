@@ -17,50 +17,28 @@ public class StmWHILE extends StmUnary {
 		String result = "";
 		result += super.generateCode();
 
-		// TODO
-		//result += tab() + "_WHILE_" + this.getId() + ":" + NL;
-		//this.incIndent();
-		// result += tab() + "// Code WHILE ici..." + NL;
-		// result += tab() + "printf(\"--- Manque WHILE...\\n\");" + NL;
-		// this.decIndent();
-
-
-
-		//******************************* TO TEST et TO VALIDER PAR LA STREET *******************************
-		String var = "_WHILE__" + this.getId();
+		String var = "_while_test__" + this.getId();
 		String label_loop = "_while_label_loop__" + this.getId();
 		String label_end = "_while_label_end__" + this.getId();
-		result += tab() + "int " + var + " = " + test.generateCode() + ";" + NL;
-		result += tab() + label_while + ":{" + NL;
 
+		result += tab() + "int " + var + ";" + NL;
+		result += tab() + label_loop + ":{" + NL;
 		incIndent();
+			result += tab() + var + " = " + test.generateCode() + ";" + NL;
 			result += tab() + "if (!" + var + ")" + NL;
 			incIndent();
 				result += tab() + "goto " + label_end + ";" + NL;
 			decIndent();
-			result += "{" + NL;
+			result += tab() + "{" + NL;
 			incIndent();
-				result += getRight().generateCode();
+				result += getSon().generateCode();
 			decIndent();
-			result += "}" + NL;
-			result += tab() + "goto" + label_loop + ";" + NL
+			result += tab() + "}" + NL;
+			result += tab() + "goto " + label_loop + ";" + NL;
 		decIndent();
-
 		result += tab() + "}" + NL;
 		result += tab() + label_end + ":{}" + NL;
 		return result;
-
-		//Le code edevrait donner ça:
-		//  int var = test;
-		//	label_while:{
-		// 		if(!var) 
-		//			goto label_end;
-		// 		{
-		// 			YYY
-		//		}
-		// 		goto label_while;
-		//	}
-		// 	label_end:{}
 	}
 
 	@Override

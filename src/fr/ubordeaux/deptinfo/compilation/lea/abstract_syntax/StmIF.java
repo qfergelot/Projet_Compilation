@@ -17,30 +17,31 @@ public class StmIF extends StmBinary {
 		String result = "";
 		result += super.generateCode();
 
-		
-
 		String var = "_if_test__" + this.getId();
 		String label_then = "_if_label_then__" + this.getId();
-		String label_fin = "_if_label_fin__" + this.getId();
+		String label_end = "_if_label_end__" + this.getId();
+
 		result += tab() + "int " + var + " = " + test.generateCode() + ";" + NL;
 		result += tab() + "if (" + var + ")" + NL;
 		incIndent();
 			result += tab() + "goto " + label_then + ";" + NL;
 		decIndent();
-		if(this.getRight()!=null){
-			result += "{" + NL;
+
+		if(this.getRight() != null) {	// Partie "else" existante
+			result += tab() + "{" + NL;
 			incIndent();
 				result += getRight().generateCode();
 			decIndent();
-			result += "}" + NL;
+			result += tab() + "}" + NL;
 		}
-		result += tab() + "goto " + label_fin + ";" + NL;
+
+		result += tab() + "goto " + label_end + ";" + NL;
 		result += tab() + label_then + ":{" + NL;
 		incIndent();
 			result += getLeft().generateCode();
 		decIndent();
 		result += tab() + "}" + NL;
-		result += tab() + label_fin + ":{}" + NL;
+		result += tab() + label_end + ":{}" + NL;
 		return result;
 	}
 

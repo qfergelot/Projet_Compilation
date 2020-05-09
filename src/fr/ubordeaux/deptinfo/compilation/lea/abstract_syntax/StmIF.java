@@ -17,9 +17,7 @@ public class StmIF extends StmBinary {
 		String result = "";
 		result += super.generateCode();
 
-		if (this.getRight()!=null) {
-			result += tab() + "// Ooops, ELSE pas encore supporté, seul le THEN est généré ici" + NL;
-		}
+		
 
 		String var = "_if_test__" + this.getId();
 		String label_then = "_if_label_then__" + this.getId();
@@ -29,6 +27,9 @@ public class StmIF extends StmBinary {
 		incIndent();
 			result += tab() + "goto " + label_then + ";" + NL;
 		decIndent();
+		if(this.getRight()!=null){
+			result += "{" + NL + getRight().generateCode() + NL +"}";
+		}
 		result += tab() + "goto " + label_fin + ";" + NL;
 		result += tab() + label_then + ":{" + NL;
 		incIndent();

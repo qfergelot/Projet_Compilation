@@ -117,7 +117,7 @@ precedence right DOT;
 precedence nonassoc CIRC;
 
 //////////////////////////////////////////////////
-//result += "char *__enum_" + getId() + " = \"" + name + "\";" + NL;
+// result += "char *__enum_" + getId() + " = \"" + name + "\";" + NL;
 // Programme principal
 //////////////////////////////////////////////////
 program ::=
@@ -164,8 +164,7 @@ declaration_list ::=
 	
 declaration ::=
 	TYPE type_declaration_list
-	 	{: addLog("*** Reduce declaration"); 
-		:}
+	 	{: addLog("*** Reduce declaration"); :}
 	| CONST const_declaration_list
 	 	{: addLog("*** Reduce declaration"); :}
 	| VAR var_declaration_list
@@ -233,8 +232,7 @@ procedure_definition_list ::=
 
 procedure_definition ::=
 	procedure_definition_head:id block:b
-	 	{: addLog("*** Reduce procedure_definition"); 
-		:}
+	 	{: addLog("*** Reduce procedure_definition"); :}
 	| procedure_definition_head:id SEMI
 	 	{: addLog("*** Reduce procedure_definition"); :}
 	;

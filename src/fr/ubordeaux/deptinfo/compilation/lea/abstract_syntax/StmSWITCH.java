@@ -2,6 +2,7 @@ package fr.ubordeaux.deptinfo.compilation.lea.abstract_syntax;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.ArrayList;
 
 import fr.ubordeaux.deptinfo.compilation.lea.type.TypeCode;
 import fr.ubordeaux.deptinfo.compilation.lea.type.TypeException;
@@ -21,13 +22,56 @@ public class StmSWITCH extends StmList {
 	public String generateCode() throws CodeException {
 		String result = "";
 		result += super.generateCode();
-		// TODO
-		result += tab() + "_SWITCH_" + this.getId() + ":" + NL;
-		this.incIndent();
-		result += tab() + "// Code SWITCH ici..." + NL;
-		result += tab() + "printf(\"--- Manque SWITCH...\\n\");" + NL;
-		this.decIndent();
+		
+		// String var = "_switch_test__" + this.getId();
+		// List<String> label_case = new ArrayList<String>();
+		// String label_end = "_switch_label_end__" + this.getId();
+		// Iterator<Stm> it = getStms().iterator();
+		// int cpt=0;
+
+		// if(it.hasNext()){
+		// 	Stm s = it.next();
+		// 	label_case.add("_label_case_" + cpt + "__" + this.getId());
+		// 	result += tab() + "int " + var + " = " + s.getExpr().generateCode() + " == " + expr.generateCode() + ";" + NL;
+		// 	result += tab() + "if (" + var + ")" + NL;
+		// 	incIndent();
+		// 		result += tab() + "goto " + label_case.get(cpt++) + ";" + NL;
+		// 	decIndent();
+		// }
+
+		// while(it.hasNext()){
+		// 	Stm s = it.next();
+		// 	label_case.add("_label_case_" + cpt + "__" + this.getId());
+		// 	result += tab() + "{" + NL;
+		// 	incIndent();
+		// 		result += tab() + var + " = " + s.getExpr().generateCode() + " == " + expr.generateCode() + ";" + NL;
+		// 		result += tab() + "if (" + var + ")" + NL;
+		// 		incIndent();
+		// 			result += tab() + "goto " + label_case.get(cpt++) + ";" + NL;
+		// 		decIndent();
+		// 		result += tab() + "{" + NL;
+		// 		incIndent();
+		// }
+
+		// result += defaultStm.generateCode();
+
+		// for(int i=0; i<cpt; i++){
+		// 	decIndent();
+		// 	result += tab() + "}" + NL;
+		// }
+
+		// cpt = 0;
+		// it = getStms().iterator();
+		// while(it.hasNext()){
+		// 	Stm s = it.next();
+		// 	result += tab() + label_case.get(cpt) + ":{}" + NL;
+		// 	s.getSon().generateCode();
+		// 	result += tab() + "goto " + label_end + ";" + NL;
+		// }
+
+
 		return result;
+
 	}
 
 	@Override

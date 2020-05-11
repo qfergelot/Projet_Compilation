@@ -58,7 +58,7 @@ public class StmFOR extends StmTernary {
 
 	@Override
 	public String toString() {
-		return "for (... ; " + test + " ; ...)";
+		return "for (" + getFirst() + " ; " + test + " ; " + getSecond() + ")";
 	}
 
 }

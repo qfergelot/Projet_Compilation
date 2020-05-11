@@ -29,58 +29,59 @@ public class StmSWITCH extends StmList {
 		
 		List<StmCASE> listCase = new ArrayList<StmCASE>();
 		List<Stm> listStm = getStms();
-
-		for (Stm stm : listStm) 
-		{
+		for (Stm stm : listStm)
 			listCase.add((StmCASE)stm);
-		}
 
 		Iterator<StmCASE> it = listCase.iterator();
-		int cpt=0;
+		int cnt = 0;
+		int nbElmts = listCase.size();
+		String caseValue;
 
-		if(it.hasNext()){
-			StmCASE s = it.next();
-			label_case.add("_label_case_" + cpt + "__" + this.getId());
-			result += tab() + "int " + var + " = " + s.getExpr().generateCode() + " == " + expr.generateCode() + ";" + NL;
-			result += tab() + "if (" + var + ")" + NL;
-			incIndent();
-				result += tab() + "goto " + label_case.get(cpt++) + ";" + NL;
-			decIndent();
-		}
-
+		// Table des branchements des cases
 		while(it.hasNext()){
 			StmCASE s = it.next();
-			label_case.add("_label_case_" + cpt + "__" + this.getId());
-			result += tab() + "{" + NL;
-			incIndent();
-				result += tab() + var + " = " + s.getExpr().generateCode() + " == " + expr.generateCode() + ";" + NL;
-				result += tab() + "if (" + var + ")" + NL;
-				incIndent();
-					result += tab() + "goto " + label_case.get(cpt++) + ";" + NL;
-				decIndent();
+			caseValue = s.getExpr().generateCode();
+			label_case.add("_switch_label_case_" + caseValue + "__" + this.getId());
+			if (cnt != 0) {
 				result += tab() + "{" + NL;
 				incIndent();
+			}
+					result += (cnt == 0) ? tab() + "int " : tab();
+					result += var + " = " + expr.generateCode() + " == " + caseValue + ";" + NL;
+					result += tab() + "if (" + var + ")" + NL;
+					incIndent();
+						result += tab() + "goto " + label_case.get(cnt++) + ";" + NL;
+					decIndent();
 		}
 
-		result += defaultStm.generateCode();
+		// Traitement du cas default
+		result += tab() + "{" + NL;
+		incIndent();
+			result += defaultStm.generateCode();
+		decIndent();
+		result += tab() + "}" + NL;
 
-		for(int i=0; i<cpt; i++){
+		for(int i = 0; i < cnt - 1; i++){
 			decIndent();
 			result += tab() + "}" + NL;
 		}
 
-		cpt = 0;
+		// Liste des cases et instructions associées
+		cnt = 0;
 		it = listCase.iterator();
 		while(it.hasNext()){
 			StmCASE s = it.next();
-			result += tab() + label_case.get(cpt) + ":{}" + NL;
-			result += s.getSon().generateCode();
-			result += tab() + "goto " + label_end + ";" + NL;
+			result += NL + tab() + label_case.get(cnt++) + ":{" + NL;
+			incIndent();
+				result += s.generateCode();
+				if (cnt != nbElmts)
+					result += tab() + "goto " + label_end + ";" + NL;
+			decIndent();
+			result += tab() + "}" + NL;
 		}
 
-
+		result += tab() + label_end + ":{}" + NL;
 		return result;
-
 	}
 
 	@Override

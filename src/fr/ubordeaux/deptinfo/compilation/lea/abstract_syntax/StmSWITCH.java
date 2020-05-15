@@ -37,7 +37,9 @@ public class StmSWITCH extends StmList {
 		int nbElmts = listCase.size();
 		String caseValue;
 
-		if (true) {
+
+		/*** Version standard ***/
+		if (true) {					/////////// A REMPLACER PAR LE TEST DE CONTIGUITE ///////////
 			Iterator<StmCASE> it = listCase.iterator();
 			int cnt = 0;
 
@@ -62,12 +64,12 @@ public class StmSWITCH extends StmList {
 			if(defaultCase){
 				result += tab() + "{" + NL;
 				incIndent();
-				result += defaultStm.generateCode();
+					result += tab() + defaultStm.generateCode();
+					result += tab() + "goto " + label_end + ";" + NL;
 				decIndent();
 				result += tab() + "}" + NL;
 			}
 			
-
 			for(int i = 0; i < cnt - 1; i++){
 				decIndent();
 				result += tab() + "}" + NL;
@@ -80,41 +82,44 @@ public class StmSWITCH extends StmList {
 				StmCASE s = it.next();
 				result += NL + tab() + label_case.get(cnt++) + ":{" + NL;
 				incIndent();
-					result += s.generateCode();
+					result += tab() + s.generateCode();
 					if (cnt != nbElmts)
 						result += tab() + "goto " + label_end + ";" + NL;
 				decIndent();
 				result += tab() + "}" + NL;
 			}
 		}
+
+		/*** Version optimisée ***/
 		else{
-			result += "int " + var + " = " + expr.generateCode() + " >= " + nbElmts + ";" + NL;
-			result += "static void *const labels[" + nbElmts + " + 1] = {";
-			for(int i=0; i<nbElmts; i++){
-				if(i>0)
+			// Tableau d'adresses
+			result += tab() + "int " + var + " = " + expr.generateCode() + " >= " + nbElmts + ";" + NL;
+			result += tab() + "static void* const labels[" + nbElmts + " + 1] = {";
+			for(int i = 0; i < nbElmts; i++){
+				if(i > 0)
 					result += ", ";
-				result += "&&label_" + i;
+				result += "&&_switch_label_case_" + i + "__" + this.getId();
 			}
-			if(defaultCase){
-				result += ", &&label_default";
-			}
+			result += (defaultCase) ? (", &&_switch_label_default_" + this.getId()) : (", &&" + label_end + this.getId());
 			result += "};" + NL;
-			result += "if (" + var + ")" + NL;
-			result += tab() + expr.generateCode() + " = " + nbElmts + ";" + NL;
-			result += "goto *labels[" + expr + "];" + NL;
 
-			for(int i=0; i<nbElmts; i++){
-				result += "label_" + i + ":{}" + NL;
-				result += listCase.get(i).generateCode();
-				result += "goto " + label_end + NL;
+			// Redirection par le tableau
+			result += tab() + "if (" + var + ")" + NL;
+			incIndent();
+				result += tab() + expr.generateCode() + " = " + nbElmts + ";" + NL;
+			decIndent();
+			result += tab() + "goto *labels[" + expr + "];" + NL;
+
+			// Liste des cases
+			for(int i = 0; i < nbElmts; i++){
+				result += tab() + "_switch_label_case_" + i + "__" + this.getId() + ":{}" + NL;
+				result += tab() + listCase.get(i).generateCode();
+				result += tab() + "goto " + label_end + NL;
 			}
-
-			if(defaultCase){
-				result += "label_default:{}" + NL;
-				result += defaultStm.generateCode();
+			if(defaultCase) {
+				result += tab() + "_switch_label_default_" + this.getId() + ":{}" + NL;
+				result += tab() + defaultStm.generateCode();
 			}
-
-			result += label_end + ":{}" + NL;
 		}
 
 		result += tab() + label_end + ":{}" + NL;

@@ -26,58 +26,95 @@ public class StmSWITCH extends StmList {
 		String var = "_switch_test__" + this.getId();
 		List<String> label_case = new ArrayList<String>();
 		String label_end = "_switch_label_end__" + this.getId();
+
+		boolean defaultCase = defaultStm != null;
 		
 		List<StmCASE> listCase = new ArrayList<StmCASE>();
 		List<Stm> listStm = getStms();
 		for (Stm stm : listStm)
 			listCase.add((StmCASE)stm);
 
-		Iterator<StmCASE> it = listCase.iterator();
-		int cnt = 0;
 		int nbElmts = listCase.size();
 		String caseValue;
 
-		// Table des branchements des cases
-		while(it.hasNext()){
-			StmCASE s = it.next();
-			caseValue = s.getExpr().generateCode();
-			label_case.add("_switch_label_case_" + caseValue + "__" + this.getId());
-			if (cnt != 0) {
+		if (true) {
+			Iterator<StmCASE> it = listCase.iterator();
+			int cnt = 0;
+
+			// Table des branchements des cases
+			while(it.hasNext()){
+				StmCASE s = it.next();
+				caseValue = s.getExpr().generateCode();
+				label_case.add("_switch_label_case_" + caseValue + "__" + this.getId());
+				if (cnt != 0) {
+					result += tab() + "{" + NL;
+					incIndent();
+				}
+						result += (cnt == 0) ? tab() + "int " : tab();
+						result += var + " = " + expr.generateCode() + " == " + caseValue + ";" + NL;
+						result += tab() + "if (" + var + ")" + NL;
+						incIndent();
+							result += tab() + "goto " + label_case.get(cnt++) + ";" + NL;
+						decIndent();
+			}
+
+			// Traitement du cas default
+			if(defaultCase){
 				result += tab() + "{" + NL;
 				incIndent();
+				result += defaultStm.generateCode();
+				decIndent();
+				result += tab() + "}" + NL;
 			}
-					result += (cnt == 0) ? tab() + "int " : tab();
-					result += var + " = " + expr.generateCode() + " == " + caseValue + ";" + NL;
-					result += tab() + "if (" + var + ")" + NL;
-					incIndent();
-						result += tab() + "goto " + label_case.get(cnt++) + ";" + NL;
-					decIndent();
+			
+
+			for(int i = 0; i < cnt - 1; i++){
+				decIndent();
+				result += tab() + "}" + NL;
+			}
+
+			// Liste des cases et instructions associées
+			cnt = 0;
+			it = listCase.iterator();
+			while(it.hasNext()){
+				StmCASE s = it.next();
+				result += NL + tab() + label_case.get(cnt++) + ":{" + NL;
+				incIndent();
+					result += s.generateCode();
+					if (cnt != nbElmts)
+						result += tab() + "goto " + label_end + ";" + NL;
+				decIndent();
+				result += tab() + "}" + NL;
+			}
 		}
+		else{
+			result += "int " + var + " = " + expr.generateCode() + " >= " + nbElmts + ";" + NL;
+			result += "static void *const labels[" + nbElmts + " + 1] = {";
+			for(int i=0; i<nbElmts; i++){
+				if(i>0)
+					result += ", ";
+				result += "&&label_" + i;
+			}
+			if(defaultCase){
+				result += ", &&label_default";
+			}
+			result += "};" + NL;
+			result += "if (" + var + ")" + NL;
+			result += tab() + expr.generateCode() + " = " + nbElmts + ";" + NL;
+			result += "goto *labels[" + expr + "];" + NL;
 
-		// Traitement du cas default
-		result += tab() + "{" + NL;
-		incIndent();
-			result += defaultStm.generateCode();
-		decIndent();
-		result += tab() + "}" + NL;
+			for(int i=0; i<nbElmts; i++){
+				result += "label_" + i + ":{}" + NL;
+				result += listCase.get(i).generateCode();
+				result += "goto " + label_end + NL;
+			}
 
-		for(int i = 0; i < cnt - 1; i++){
-			decIndent();
-			result += tab() + "}" + NL;
-		}
+			if(defaultCase){
+				result += "label_default:{}" + NL;
+				result += defaultStm.generateCode();
+			}
 
-		// Liste des cases et instructions associées
-		cnt = 0;
-		it = listCase.iterator();
-		while(it.hasNext()){
-			StmCASE s = it.next();
-			result += NL + tab() + label_case.get(cnt++) + ":{" + NL;
-			incIndent();
-				result += s.generateCode();
-				if (cnt != nbElmts)
-					result += tab() + "goto " + label_end + ";" + NL;
-			decIndent();
-			result += tab() + "}" + NL;
+			result += label_end + ":{}" + NL;
 		}
 
 		result += tab() + label_end + ":{}" + NL;

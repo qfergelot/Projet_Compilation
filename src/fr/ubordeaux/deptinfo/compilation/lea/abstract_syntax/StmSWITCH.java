@@ -39,7 +39,7 @@ public class StmSWITCH extends StmList {
 
 
 		/*** Version standard ***/
-		if (areCasesValuesContiguous(listCase)) {
+		if (!areCasesValuesContiguous(listCase)) {
 			Iterator<StmCASE> it = listCase.iterator();
 			int cnt = 0;
 

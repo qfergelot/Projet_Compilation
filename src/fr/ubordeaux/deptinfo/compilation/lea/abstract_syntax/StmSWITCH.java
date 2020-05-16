@@ -120,13 +120,19 @@ public class StmSWITCH extends StmList {
 
 			// Liste des cases
 			for(int i = 0; i < nbElmts; i++){
-				result += tab() + "_switch_label_case_" + i + "__" + this.getId() + ":{}" + NL;
-				result += tab() + listCase.get(i).generateCode();
-				result += tab() + "goto " + label_end + ";" + NL;
+				result += NL + tab() + "_switch_label_case_" + i + "__" + this.getId() + ":{" + NL;
+				incIndent();
+					result += tab() + listCase.get(i).generateCode();
+					result += tab() + "goto " + label_end + ";" + NL;
+				decIndent();
+				result += tab() + "}" + NL;
 			}
 			if(defaultCase) {
-				result += tab() + "_switch_label_default_" + this.getId() + ":{}" + NL;
-				result += tab() + defaultStm.generateCode();
+				result += NL + tab() + "_switch_label_default_" + this.getId() + ":{" + NL;
+				incIndent();
+					result += tab() + defaultStm.generateCode();
+				decIndent();
+				result += tab() + "}" + NL;
 			}
 		}
 

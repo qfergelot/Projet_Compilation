@@ -53,8 +53,8 @@ while(i > 1) {
 i = 3;
 j = 36;
 switch (i) {
-	case 2: println "37";
-	case 4: println "38";
+	case 1: println "37";
+	case 2: println "38";
 	case 3: 
 		switch (j) {
 			case 1: println "41";
@@ -63,7 +63,7 @@ switch (i) {
 			case 4: println "44";
 			default: println "45";
 		}
-	case 1: println "48";
+	case 4: println "48";
 	default: println "49";
 }
 

@@ -96,17 +96,17 @@ public class StmSWITCH extends StmList {
 			String var_nb_case = "_switch_nb_case__" + this.getId();
 			result += tab() + "int " + var_nb_case + " = " + nbElmts + ";" + NL;
 			result += tab() + "int " + var + " = " + expr.generateCode() + " >= " + var_nb_case + ";" + NL;
-			result += tab() + "static void* const " + label_tab + "[" + var_nb_case + " + 1] = { ";
+			result += tab() + "static void* const " + label_tab + "[] = { ";
 			for(int i = 0; i < nbElmts; i++){
 				if(i > 0) {
 					result += "," + NL;
-					for(int j = 0; j < 25; j++)
+					for(int j = 0; j < 17; j++)
 						result += tab();
 				}
 				result += "&&_switch_label_case_" + i + "__" + this.getId();
 			}
 			result += "," + NL;
-			for(int i = 0; i < 25; i++)
+			for(int i = 0; i < 17; i++)
 				result += tab();
 			result += (defaultCase) ? ("&&_switch_label_default_" + this.getId()) : ("&&" + label_end + this.getId());
 			result += " };" + NL;

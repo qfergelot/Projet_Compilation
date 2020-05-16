@@ -57,10 +57,10 @@ switch (i) {
 	case 2: println "38";
 	case 3: 
 		switch (j) {
-			case 0: println "41";
-			case 1: println "42";
-			case 2: println "43";
-			case 3: println "44";
+			case 1: println "41";
+			case 2: println "42";
+			case 3: println "43";
+			case 4: println "44";
 			default: println "45";
 		}
 	case 4: println "48";

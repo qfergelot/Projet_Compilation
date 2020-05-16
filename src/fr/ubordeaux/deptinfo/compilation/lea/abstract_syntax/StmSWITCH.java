@@ -97,19 +97,21 @@ public class StmSWITCH extends StmList {
 			result += tab() + "int " + var_nb_case + " = " + nbElmts + ";" + NL;
 			result += tab() + "int " + var + " = " + expr.generateCode() + " >= " + var_nb_case + ";" + NL;
 			result += tab() + "static void* const " + label_tab + "[] = { ";
-			for(int i = 0; i < nbElmts; i++){
-				if(i > 0) {
-					result += "," + NL;
-					for(int j = 0; j < 17; j++)
-						result += tab();
+			incIndent();
+				for(int i = 0; i < nbElmts; i++){
+					if(i > 0) {
+						result += ",";
+						// for(int j = 0; j < 17; j++)
+						// 	result += tab();
+					}
+					result += NL + tab() + "&&_switch_label_case_" + i + "__" + this.getId();
 				}
-				result += "&&_switch_label_case_" + i + "__" + this.getId();
-			}
-			result += "," + NL;
-			for(int i = 0; i < 17; i++)
-				result += tab();
-			result += (defaultCase) ? ("&&_switch_label_default_" + this.getId()) : ("&&" + label_end + this.getId());
-			result += " };" + NL;
+				result += "," + NL + tab();
+				// for(int i = 0; i < 17; i++)
+				// 	result += tab();
+				result += (defaultCase) ? ("&&_switch_label_default_" + this.getId()) : ("&&" + label_end);
+			decIndent();
+			result += NL + tab() + "};" + NL;
 
 			// Redirection par le tableau
 			result += tab() + "if (" + var + ")" + NL;
@@ -136,7 +138,7 @@ public class StmSWITCH extends StmList {
 			}
 		}
 
-		result += tab() + label_end + ":{}" + NL;
+		result += NL + tab() + label_end + ":{}" + NL;
 		return result;
 	}
 
@@ -146,11 +148,8 @@ public class StmSWITCH extends StmList {
 		while(it.hasNext()) {
 			StmCASE s = it.next();
 			ExprVALUE e = (ExprVALUE)s.getExpr();
-			if ((int)e.getValue() != cnt)
+			if ((int)e.getValue() != cnt++)
 				return false;
-			System.out.println("valeur du case : " + e.getValue());
-			System.out.println("valeur du compteur : " + cnt);
-			cnt++;
 		}
 		return true;
 	}

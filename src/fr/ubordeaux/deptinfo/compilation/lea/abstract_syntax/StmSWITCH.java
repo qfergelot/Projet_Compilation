@@ -39,7 +39,7 @@ public class StmSWITCH extends StmList {
 
 
 		/*** Version standard ***/
-		if (true) {					/////////// A REMPLACER PAR LE TEST DE CONTIGUITE ///////////
+		if (areCasesValuesContiguous(listCase)) {
 			Iterator<StmCASE> it = listCase.iterator();
 			int cnt = 0;
 
@@ -61,14 +61,13 @@ public class StmSWITCH extends StmList {
 			}
 
 			// Traitement du cas default
-			if(defaultCase){
-				result += tab() + "{" + NL;
-				incIndent();
+			result += tab() + "{" + NL;
+			incIndent();
+				if(defaultCase)
 					result += tab() + defaultStm.generateCode();
-					result += tab() + "goto " + label_end + ";" + NL;
-				decIndent();
-				result += tab() + "}" + NL;
-			}
+				result += tab() + "goto " + label_end + ";" + NL;
+			decIndent();
+			result += tab() + "}" + NL;
 			
 			for(int i = 0; i < cnt - 1; i++){
 				decIndent();
@@ -93,28 +92,37 @@ public class StmSWITCH extends StmList {
 		/*** Version optimisée ***/
 		else{
 			// Tableau d'adresses
-			result += tab() + "int " + var + " = " + expr.generateCode() + " >= " + nbElmts + ";" + NL;
-			result += tab() + "static void* const labels[" + nbElmts + " + 1] = {";
+			String label_tab = "_switch_label_tab__" + this.getId();
+			String var_nb_case = "_switch_nb_case__" + this.getId();
+			result += tab() + "int " + var_nb_case + " = " + nbElmts + ";" + NL;
+			result += tab() + "int " + var + " = " + expr.generateCode() + " >= " + var_nb_case + ";" + NL;
+			result += tab() + "static void* const " + label_tab + "[" + var_nb_case + " + 1] = { ";
 			for(int i = 0; i < nbElmts; i++){
-				if(i > 0)
-					result += ", ";
+				if(i > 0) {
+					result += "," + NL;
+					for(int j = 0; j < 25; j++)
+						result += tab();
+				}
 				result += "&&_switch_label_case_" + i + "__" + this.getId();
 			}
-			result += (defaultCase) ? (", &&_switch_label_default_" + this.getId()) : (", &&" + label_end + this.getId());
-			result += "};" + NL;
+			result += "," + NL;
+			for(int i = 0; i < 25; i++)
+				result += tab();
+			result += (defaultCase) ? ("&&_switch_label_default_" + this.getId()) : ("&&" + label_end + this.getId());
+			result += " };" + NL;
 
 			// Redirection par le tableau
 			result += tab() + "if (" + var + ")" + NL;
 			incIndent();
-				result += tab() + expr.generateCode() + " = " + nbElmts + ";" + NL;
+				result += tab() + expr.generateCode() + " = " + var_nb_case + ";" + NL;
 			decIndent();
-			result += tab() + "goto *labels[" + expr + "];" + NL;
+			result += tab() + "goto *" + label_tab + "[" + expr + "];" + NL;
 
 			// Liste des cases
 			for(int i = 0; i < nbElmts; i++){
 				result += tab() + "_switch_label_case_" + i + "__" + this.getId() + ":{}" + NL;
 				result += tab() + listCase.get(i).generateCode();
-				result += tab() + "goto " + label_end + NL;
+				result += tab() + "goto " + label_end + ";" + NL;
 			}
 			if(defaultCase) {
 				result += tab() + "_switch_label_default_" + this.getId() + ":{}" + NL;
@@ -124,6 +132,21 @@ public class StmSWITCH extends StmList {
 
 		result += tab() + label_end + ":{}" + NL;
 		return result;
+	}
+
+	private boolean areCasesValuesContiguous(List<StmCASE> listCase) {
+		int cnt = 0;
+		Iterator<StmCASE> it = listCase.iterator();
+		while(it.hasNext()) {
+			StmCASE s = it.next();
+			ExprVALUE e = (ExprVALUE)s.getExpr();
+			if ((int)e.getValue() != cnt)
+				return false;
+			System.out.println("valeur du case : " + e.getValue());
+			System.out.println("valeur du compteur : " + cnt);
+			cnt++;
+		}
+		return true;
 	}
 
 	@Override

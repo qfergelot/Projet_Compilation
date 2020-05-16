@@ -10,11 +10,9 @@ public class ExprENUM extends ExprVALUE {
 		super(object, line, column);
 		this.name = name;
 		setType(type);
-		
 	}
 
 	public String toString() {
 		return name;
 	}
-
 }

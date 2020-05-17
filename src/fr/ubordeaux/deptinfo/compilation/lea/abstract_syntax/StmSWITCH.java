@@ -17,8 +17,6 @@ public class StmSWITCH extends StmList {
 		super(stms, line, column);
 		this.expr = expr;
 		this.defaultStm = stm;
-
-		this.exprIsString = expr.getType().getTypeCode() == TypeCode.STRING;
 	}
 
 	@Override
@@ -40,9 +38,11 @@ public class StmSWITCH extends StmList {
 		int nbElmts = listCase.size();
 		String caseValue;
 
+		boolean exprIsString = expr.getTypeCode() == TypeCode.STRING;
+
 
 		/*** Version standard ***/
-		if (!areCasesValuesContiguous(listCase)) {
+		if (exprIsString || !areCasesValuesContiguous(listCase)) {
 			Iterator<StmCASE> it = listCase.iterator();
 			int cnt = 0;
 
@@ -56,7 +56,8 @@ public class StmSWITCH extends StmList {
 					incIndent();
 				}
 						result += (cnt == 0) ? tab() + "int " : tab();
-						result += var + " = " + expr.generateCode() + " == " + caseValue + ";" + NL;
+						result += (exprIsString) ? (var + " = " + "!(strcmp(" + expr.generateCode() + "," + caseValue + "));" + NL)
+												: (var + " = " + expr.generateCode() + " == " + caseValue + ";" + NL);
 						result += tab() + "if (" + var + ")" + NL;
 						incIndent();
 							result += tab() + "goto " + label_case.get(cnt++) + ";" + NL;
@@ -98,14 +99,7 @@ public class StmSWITCH extends StmList {
 			String label_tab = "_switch_label_tab__" + this.getId();
 			String var_nb_case = "_switch_nb_case__" + this.getId();
 			result += tab() + "int " + var_nb_case + " = " + nbElmts + ";" + NL;
-			if(!exprIsString)
-			{
-				result += tab() + "int " + var + " = " + expr.generateCode() + " >= " + var_nb_case + ";" + NL;
-			}
-			else
-			{
-
-			}
+			result += tab() + "int " + var + " = " + expr.generateCode() + " >= " + var_nb_case + ";" + NL;
 			result += tab() + "static void* const " + label_tab + "[] = { ";
 			incIndent();
 				for(int i = 0; i < nbElmts; i++){

@@ -152,7 +152,7 @@ public class StmSWITCH extends StmList {
 	@Override
 	public void checkType() throws TypeException {
 		expr.checkType();
-		TypeCode[] typeCodes = {TypeCode.INTEGER, TypeCode.ENUM};
+		TypeCode[] typeCodes = {TypeCode.INTEGER, TypeCode.ENUM, TypeCode.STRING};
 		expr.getType().assertType(this, typeCodes);
 
 		if (defaultStm != null)

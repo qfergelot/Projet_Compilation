@@ -120,6 +120,12 @@ Lionel
 			error="${data}/progr-9.log">
 			<arg value="${data}/progr-9.lea" />
 		</java>
+		<java classname="Main" 
+			classpath="${bin}:${tools}/java-cup-11b-runtime.jar" 
+			output="${data}/progr-11.c"
+			error="${data}/progr-11.log">
+			<arg value="${data}/progr-11.lea" />
+		</java>
 	</target>
 
 	<!-- ================================= 

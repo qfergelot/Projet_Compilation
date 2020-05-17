@@ -13,6 +13,7 @@ test: boolean;
 i,j : integer;
 today : jours;
 color : couleurs;
+name : string;
 
 begin
 
@@ -52,7 +53,16 @@ for(i = 0; i < 31; i = i + 1)
 		case 4: println("4");
 		case 5: println("5");
 		case 6: println("6");
-		case 7: println("7");
+		case 7: 
+
+			switch(name)
+			{
+				case "Yohan": println("Yohan");
+				case "Gabriel": println("Gabriel");
+				case "": println("Vide");
+				default: println("default");
+			}
+
 		case 8: println("8");
 		case 9: println("9");
 		case 10: 

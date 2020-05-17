@@ -1,10 +1,6 @@
 
 bin/
 
-*.c
-
-*.log
-
 src/fr/ubordeaux/deptinfo/compilation/lea/parser/Parser.java
 
 src/fr/ubordeaux/deptinfo/compilation/lea/parser/Symbols.java

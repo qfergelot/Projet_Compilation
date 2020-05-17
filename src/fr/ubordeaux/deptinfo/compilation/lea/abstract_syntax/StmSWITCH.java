@@ -99,16 +99,11 @@ public class StmSWITCH extends StmList {
 			result += tab() + "static void* const " + label_tab + "[] = { ";
 			incIndent();
 				for(int i = 0; i < nbElmts; i++){
-					if(i > 0) {
+					if(i > 0)
 						result += ",";
-						// for(int j = 0; j < 17; j++)
-						// 	result += tab();
-					}
 					result += NL + tab() + "&&_switch_label_case_" + i + "__" + this.getId();
 				}
 				result += "," + NL + tab();
-				// for(int i = 0; i < 17; i++)
-				// 	result += tab();
 				result += (defaultCase) ? ("&&_switch_label_default_" + this.getId()) : ("&&" + label_end);
 			decIndent();
 			result += NL + tab() + "};" + NL;
@@ -116,7 +111,7 @@ public class StmSWITCH extends StmList {
 			// Redirection par le tableau
 			result += tab() + "if (" + var + ")" + NL;
 			incIndent();
-				result += tab() + expr.generateCode() + " = " + var_nb_case + ";" + NL;
+				result += tab() + "goto *" + label_tab + "[" + var_nb_case + "];" + NL;
 			decIndent();
 			result += tab() + "goto *" + label_tab + "[" + expr + "];" + NL;
 

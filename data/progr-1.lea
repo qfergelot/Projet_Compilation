@@ -40,9 +40,9 @@ while (k < RAC) {
  }
 
 // On affiche
-print "Les ";
+print "Les nombres premiers allant jusqu'à ";
 print MAX;
-print " premiers nombres premiers sont ";
+print " sont ";
 i = 1;
 while (i < MAX) {
   if (T[i]) {

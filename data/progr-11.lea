@@ -59,7 +59,7 @@ for(i = 0; i < 31; i = i + 1)
 			{
 				case "Yohan": println("Yohan");
 				case "Gabriel": println("Gabriel");
-				case "": println("Vide");
+				case "azerty": println("Vide");
 				default: println("default");
 			}
 

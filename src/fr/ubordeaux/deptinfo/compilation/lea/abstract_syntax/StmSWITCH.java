@@ -50,11 +50,12 @@ public class StmSWITCH extends StmList {
 			while(it.hasNext()){
 				StmCASE s = it.next();
 				caseValue = s.getExpr().generateCode();
+				String tmp;
 				if (exprIsString) {	// En cas de string, on enlève les double côte
 					if (caseValue.length() == 2)
 						throw new CodeException("Empty string");
-					caseValue = caseValue.substring(1, caseValue.length() - 1);
-					label_case.add("_switch_label_case_" + caseValue + "__" + this.getId());
+					tmp = caseValue.substring(1, caseValue.length() - 1);
+					label_case.add("_switch_label_case_" + tmp + "__" + this.getId());
 				}
 				else
 					label_case.add("_switch_label_case_" + caseValue + "__" + this.getId());

@@ -11,11 +11,14 @@ public class StmSWITCH extends StmList {
 
 	private Expr expr;
 	private Stm defaultStm; // default
+	private boolean exprIsString = false;
 
 	public StmSWITCH(Expr expr, List<Stm> stms, Stm stm, int line, int column) {
 		super(stms, line, column);
 		this.expr = expr;
 		this.defaultStm = stm;
+
+		this.exprIsString = expr.getType().getTypeCode() == TypeCode.STRING;
 	}
 
 	@Override
@@ -95,7 +98,14 @@ public class StmSWITCH extends StmList {
 			String label_tab = "_switch_label_tab__" + this.getId();
 			String var_nb_case = "_switch_nb_case__" + this.getId();
 			result += tab() + "int " + var_nb_case + " = " + nbElmts + ";" + NL;
-			result += tab() + "int " + var + " = " + expr.generateCode() + " >= " + var_nb_case + ";" + NL;
+			if(!exprIsString)
+			{
+				result += tab() + "int " + var + " = " + expr.generateCode() + " >= " + var_nb_case + ";" + NL;
+			}
+			else
+			{
+
+			}
 			result += tab() + "static void* const " + label_tab + "[] = { ";
 			incIndent();
 				for(int i = 0; i < nbElmts; i++){

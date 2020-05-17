@@ -50,6 +50,10 @@ public class StmSWITCH extends StmList {
 			while(it.hasNext()){
 				StmCASE s = it.next();
 				caseValue = s.getExpr().generateCode();
+				if (exprIsString)
+					if (caseValue.lenght() == 2)
+						throws CodeException("Empty string");
+					caseValue = caseValue.substring(1, caseValue.lenght() - 1);
 				label_case.add("_switch_label_case_" + caseValue + "__" + this.getId());
 				if (cnt != 0) {
 					result += tab() + "{" + NL;

@@ -89,7 +89,7 @@ non terminal List<String> identifier_list;
 	
 non terminal Stm 
 	statement_list_opt, statement_list, statement, simple_statement, 
-	simple_statement_with_semi, 
+	simple_statement_opt, simple_statement_with_semi, 
 	structured_statement, case_statement, default_statement_opt;
 	
 non terminal List<Stm> 
@@ -476,6 +476,17 @@ simple_statement_with_semi ::=
 			RESULT = s;
 		:}
 	;
+
+simple_statement_opt ::=
+	/* empty */
+	 	{: addLog("*** Reduce simple_statement_opt"); 
+			RESULT = null;
+		:}
+	| simple_statement:s
+	 	{: addLog("*** Reduce simple_statement_opt"); 
+			RESULT = s;
+		:}
+	;
 	
 simple_statement ::=
 	variable_access:v EQUAL:op expression:e
@@ -525,7 +536,7 @@ structured_statement ::=
 	 	{: addLog("*** Reduce structured_statement"); 
 			RESULT = new StmWHILE(e, s, opxleft.getLine(), opxleft.getColumn()); 
 		:}
-	| FOR:op LPAR simple_statement:s1 SEMI expression:e SEMI simple_statement:s2 RPAR statement:s3
+	| FOR:op LPAR simple_statement_opt:s1 SEMI expression:e SEMI simple_statement_opt:s2 RPAR statement:s3
 	 	{: addLog("*** Reduce structured_statement"); 
 			RESULT =  new StmFOR(e, s1, s2, s3, opxleft.getLine(), opxleft.getColumn());;
 		:}

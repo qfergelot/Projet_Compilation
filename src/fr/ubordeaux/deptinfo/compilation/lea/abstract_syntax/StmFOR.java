@@ -22,7 +22,8 @@ public class StmFOR extends StmTernary {
 		String label_end = "_for_label_end__" + this.getId();
 
 		result += tab() + "int " + var + ";" + NL;
-		result += tab() + getFirst().generateCode() + NL;
+		if (getFirst() != null)
+			result += tab() + getFirst().generateCode() + NL;
 		result += tab() + label_loop + ":{" + NL;
 		incIndent();
 			result += tab() + var + " = " + test.generateCode() + ";" + NL;
@@ -33,7 +34,8 @@ public class StmFOR extends StmTernary {
 			result += tab() + "{" + NL;
 			incIndent();
 				result += getThird().generateCode();
-				result += getSecond().generateCode();
+				if (getSecond() != null)
+					result += getSecond().generateCode();
 			decIndent();
 			result += tab() + "}" + NL;
 			result += tab() + "goto " + label_loop + ";" + NL;

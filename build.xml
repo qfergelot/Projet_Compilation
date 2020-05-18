@@ -122,9 +122,9 @@ Lionel
 		</java>
 		<java classname="Main" 
 			classpath="${bin}:${tools}/java-cup-11b-runtime.jar" 
-			output="${data}/progr-11.c"
-			error="${data}/progr-11.log">
-			<arg value="${data}/progr-11.lea" />
+			output="${data}/progr-perso.c"
+			error="${data}/progr-perso.log">
+			<arg value="${data}/progr-perso.lea" />
 		</java>
 	</target>
 

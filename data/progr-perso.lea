@@ -1,0 +1,161 @@
+/////////////////////////////////////////////////////////
+// Structures de contrôle IF, FOR, WHILE, SWITCH
+// Affichage attendu:
+// Un seul case
+// 0 1
+// /* une phrase en fonction du jour choisi */
+// 3 4 5 6
+// /* Phrase correspondant au nom choisi */
+// 8 9
+// You've hited the big value
+// 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30
+// default
+/////////////////////////////////////////////////////////
+
+type
+couleurs = (RED, BLUE, YELLOW, GREEN);
+jours = (SUNDAY, MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY);
+
+const
+BIG_VALUE = 23558;
+
+var
+test: boolean;
+i,j,k : integer;
+code : integer;
+today : jours;
+color : couleurs;
+name : string;
+
+begin
+
+println "Quel jour de la semaine est-on le plus heureux de sortir du travail ?";
+println "(Dimanche = 0, Lundi = 1, Mardi = 2, Mercredi = 3, Jeudi = 4, Vendredi = 5, Samedi = 6)";
+print "Votre réponse : ";
+readln today;
+
+print "Choisissez une couleur cachée entre 0 et 3 : ";
+readln color;
+
+println "Veuillez vous identifier.";
+print "Code secret : ";
+readln code;
+
+test = true;
+
+switch(i + j)													//***** Switch optimisé + un seul case + sans default
+{
+	case 0: println("Un seul case");
+}
+
+for(i = 0; i < 32; i = i + 1)									//***** Structure for
+{
+	switch(i + j)												//***** Switch optimisé avec de nombreux cases
+	{
+		case 0: print("0 ");
+		case 1: println("1");
+		case 2: 
+			if(today == FRIDAY)									//***** Structure if + avec else
+			{
+				println("Bravo ! Voici donc le résultat de votre couleur en récompense :");
+				switch(color)									//***** Switch standard
+				{
+					case YELLOW: print("Vous avez choisi la couleur Jaune ! (valeur : ");
+					case BLUE: print("Vous avez choisi la couleur Bleu ! (valeur : ");
+					case RED: print("Vous avez choisi la couleur Rouge ! (valeur : ");
+					case GREEN: print("Vous avez choisi la couleur Vert ! (valeur : ");
+					default: println("Vous n'avez choisi aucune couleur, tant pis pour vous.");
+				}
+
+				switch(color)									//***** Switch optimisé + sans default
+				{
+					case RED: println ("0)");
+					case BLUE: println ("1)");
+					case YELLOW: println ("2)");
+					case GREEN: println ("3)");
+				}
+			}
+			else
+			{
+				println "Mauvaise réponse.";
+			}
+
+		case 3: print("3 ");
+		case 4: print("4 ");
+		case 5: print("5 ");
+		case 6: println("6");
+		case 7: 
+			{
+				switch(code)									//***** switch standard
+				{
+					case 42: name = "Yohan";
+					case 10: name = "Gabriel";
+					case 20: name = "Quentin";
+					case 93: name = "Jean_Christophe";
+					default: name = "Error";
+				}
+				switch(name)									//***** Switch standard + utilisation de strings
+				{
+					case "Yohan": println("Code vrai. Heureux de vous revoir Yohan, vous êtes le meilleurs d'entre eux.");
+					case "Gabriel": println("Code vrai. Heureux de vous revoir Gabriel, vous êtes le meilleurs d'entre eux.");
+					case "Quentin": println("Code vrai. Heureux de vous revoir Quentin, vous êtes le meilleurs d'entre eux.");
+					case "Jean_Christophe": println("Code vrai. Heureux de vous revoir Jean-Christophe, vous êtes le meilleurs d'entre eux.");
+					default: println("Code faux ! Vous n'êtes pas l'un de nos créateur, déguerpissez !");
+				}
+			}
+
+		case 8: print("8 ");
+		case 9: println("9");
+		case 10: 
+			{
+				if(test)										//***** Structure if + sans else
+				{
+					switch(k)									//***** Switch standard + sans default + aucun case ne match
+					{
+						case 1: println("1 étrange");
+						case 3: println("3 étonnant");
+					}
+				}
+				while(test)										//***** Structure while
+				{
+					for(k = BIG_VALUE - 5; k < BIG_VALUE + 10; k = k + 1)			//***** Structure for imbriqué + grandes valeurs
+					{
+						switch(k)								//***** switch standard + sans default + grandes valeurs
+						{
+							case 8950: println("8950");
+							case BIG_VALUE :
+								{ 
+									println("You've hited the big value!");
+									test = false;
+								}
+						}
+					}
+				}
+			}
+
+		case 11: print("11 ");
+		case 12: print("12 ");
+		case 13: print("13 ");
+		case 14: print("14 ");
+		case 15: print("15 ");
+		case 16: print("16 ");
+		case 17: print("17 ");
+		case 18: print("18 ");
+		case 19: print("19 ");
+		case 20: print("20 ");
+		case 21: print("21 ");
+		case 22: print("22 ");
+		case 23: print("23 ");
+		case 24: print("24 ");
+		case 25: print("25 ");
+		case 26: print("26 ");
+		case 27: print("27 ");
+		case 28: print("28 ");
+		case 29: print("29 ");
+		case 30: println("30");
+		default : println("default");
+	}
+}
+
+end
+

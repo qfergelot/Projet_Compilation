@@ -91,7 +91,7 @@ for(i = 0; i < 32; i = i + 1)									//***** Structure for
 					case 42: name = "Yohan";
 					case 10: name = "Gabriel";
 					case 20: name = "Quentin";
-					case 93: name = "Jean_Christophe";
+					case 93: name = "Jean-Christophe";
 					default: name = "Error";
 				}
 				switch(name)									//***** Switch standard + utilisation de strings
@@ -99,7 +99,7 @@ for(i = 0; i < 32; i = i + 1)									//***** Structure for
 					case "Yohan": println("Code vrai. Heureux de vous revoir Yohan, vous êtes le meilleurs d'entre eux.");
 					case "Gabriel": println("Code vrai. Heureux de vous revoir Gabriel, vous êtes le meilleurs d'entre eux.");
 					case "Quentin": println("Code vrai. Heureux de vous revoir Quentin, vous êtes le meilleurs d'entre eux.");
-					case "Jean_Christophe": println("Code vrai. Heureux de vous revoir Jean-Christophe, vous êtes le meilleurs d'entre eux.");
+					case "Jean-Christophe": println("Code vrai. Heureux de vous revoir Jean-Christophe, vous êtes le meilleurs d'entre eux.");
 					default: println("Code faux ! Vous n'êtes pas l'un de nos créateur, déguerpissez !");
 				}
 			}
